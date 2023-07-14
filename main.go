@@ -1,6 +1,7 @@
 package main
 
 import (
+	"embed"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -20,6 +21,11 @@ type KubeConfig struct {
 type Context struct {
 	Name string `yaml:"name"`
 }
+
+var (
+	//go:embed icons/kubernetes.png
+	iconFile embed.FS
+)
 
 func main() {
 	systray.Run(onReady, onExit)
@@ -99,7 +105,7 @@ func getDefaultPath() string {
 }
 
 func loadIcon() ([]byte, error) {
-	file, err := os.OpenFile("icons/kubernetes.png", os.O_RDONLY, 0)
+	file, err := iconFile.Open("icons/kubernetes.png")
 
 	if err != nil {
 		return nil, err
